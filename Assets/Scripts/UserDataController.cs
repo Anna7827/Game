@@ -1,5 +1,4 @@
 using System;
-
 using UnityEngine;
 
 
@@ -7,8 +6,9 @@ using UnityEngine;
 public class UserData
 {
     public int Coins;
-    // public int Exp;
-    public int Lives;
+    public int Crystals;
+    public int Hearts;
+    public int Lilys;
 }
 
 public class UserDataController : MonoBehaviour
@@ -49,8 +49,9 @@ public class UserDataController : MonoBehaviour
             print("create new user data");
             userData = new UserData();
             userData.Coins = 0;
-            //  userData.Exp = 0;
-            userData.Lives = 3;
+            userData.Crystals = 0;
+            userData.Lilys = 0;
+            userData.Hearts = 3;
         }
     }
 
@@ -63,13 +64,19 @@ public class UserDataController : MonoBehaviour
 
     public void AddHealth(int hp)
     {
-        userData.Lives += hp;
+        userData.Hearts += hp;
         SaveData();
     }
 
     public void RemoveHealth(int hp)
     {
-        userData.Lives -= hp;
+        userData.Hearts -= hp;
+        SaveData();
+    }
+
+    public void RemoveLilys(int removeLilys)
+    {
+        userData.Lilys -= removeLilys;
         SaveData();
     }
 
@@ -79,10 +86,24 @@ public class UserDataController : MonoBehaviour
         SaveData();
     }
 
+    public void AddCrystals(int amount)
+    {
+        userData.Crystals += amount;
+        SaveData();
+    }
+
+    public void AddLilys(int amount)
+    {
+        userData.Lilys += amount;
+        SaveData();
+    }
+
     public void ResetData()
     {
         userData.Coins = 0;
-        userData.Lives = 3;
+        userData.Crystals = 0;
+        userData.Lilys = 0;
+        userData.Hearts = 3;
     }
 
     public void ResetCoins()
@@ -90,8 +111,19 @@ public class UserDataController : MonoBehaviour
         userData.Coins = 0;
     }
 
+    public void ResetCrystals()
+    {
+        userData.Crystals = 0;
+    }
+
+    public void ResetLilys()
+    {
+        userData.Lilys = 0;
+    }
+
     public void ResetLives()
     {
-        userData.Lives = 3;
+        userData.Hearts = 3;
     }
+
 }

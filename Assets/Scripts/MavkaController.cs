@@ -8,6 +8,7 @@ public class MavkaController : MonoBehaviour
     [SerializeField] private float jump = 20;
     [SerializeField] private Transform SensorGround;
     [SerializeField] private GameUI gameUI;
+    //[SerializeField] private UserDataController userDataController;
     [SerializeField] private Rigidbody2D lily;
     [SerializeField] private Transform AttackPoint;
     [SerializeField] private Transform AttackPoint2;
@@ -17,21 +18,25 @@ public class MavkaController : MonoBehaviour
     private SpriteRenderer sr;
     private bool isRight = true;
     private bool IsGround;
-    private int countCoins = 0;
-    private int countCrystals = 0;
-    private int hearts = 3;
-    private int countLilys = 5;
+    //private int hearts = 3;
+    //private int countLilys = 5;
     public Vector3 chackPoint;
 
     public int coins
     {
-        get => countCoins;
+        get => UserDataController.Instance.userData.Coins;
     }
 
     public int crystals
     {
-        get => countCrystals;
+        get => UserDataController.Instance.userData.Crystals;
     }
+
+    public int lilys
+    {
+        get => UserDataController.Instance.userData.Lilys;
+    }
+
 
     private void Awake()
     {
@@ -42,8 +47,9 @@ public class MavkaController : MonoBehaviour
 
     void Start()
     {
-        gameUI.SetCountLilysUI(countLilys);
+       
         chackPoint = transform.position;
+        //UserDataController.Instance.userData.Lilys=5;
     }
 
     void FixedUpdate()
@@ -62,13 +68,12 @@ public class MavkaController : MonoBehaviour
     }
 
 
-
     void Attack ()
     {
-        if (Input.GetKeyDown(KeyCode.Return)&& countLilys> 0)
+        if (Input.GetKeyDown(KeyCode.Return)&& UserDataController.Instance.userData.Lilys > 0)
         {
-            countLilys--;
-            gameUI.SetCountLilysUI(countLilys);
+            UserDataController.Instance.RemoveLilys(1);
+            gameUI.SetCountLilysUI(UserDataController.Instance.userData.Lilys);
             anim.SetTrigger("Attack");
         }
     }
@@ -120,24 +125,27 @@ public class MavkaController : MonoBehaviour
     {
         if (collision.tag == "Coins")
         {
-            countCoins += 100;
-            gameUI.SetCountCoinsUI(countCoins);
+            //countCoins += 100;
+            UserDataController.Instance.AddCoins (100);
+            gameUI.SetCountCoinsUI(UserDataController.Instance.userData.Coins);
             Destroy(collision.gameObject);
         }
 
         else if (collision.tag == "Crystals")
         {
-            countCrystals += 150;
-            gameUI.SetCountCrystalsUI(countCrystals);
+            //countCrystals += 150;
+            UserDataController.Instance.AddCrystals(150);
+            gameUI.SetCountCrystalsUI(UserDataController.Instance.userData.Crystals);
             Destroy(collision.gameObject);
         }
 
 
         else if (collision.tag == "Lilys")
         {
-            int count = collision.GetComponent<Item>().count;
-            countLilys += count;
-            gameUI.SetCountLilysUI(countLilys);
+           // int count = collision.GetComponent<Item>().count;
+            //countLilys += count;
+            UserDataController.Instance.AddLilys(5);
+            gameUI.SetCountLilysUI(UserDataController.Instance.userData.Lilys);
             Destroy(collision.gameObject);
         }
 
@@ -158,11 +166,13 @@ public class MavkaController : MonoBehaviour
     
         private void Damage()
     {
-        hearts--;
-        gameUI.RemoveHeart();
-        if (hearts == 0)
+        //hearts--;
+        UserDataController.Instance.RemoveHealth(1);
+        gameUI.UpdateHeart(UserDataController.Instance.userData.Hearts);
+        if (UserDataController.Instance.userData.Hearts == 0)
         {
             Time.timeScale = 0;
+            UserDataController.Instance.ResetLives();
             gameUI.GameOver();
         }
     }

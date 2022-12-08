@@ -9,18 +9,28 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject pauseButton;
     [SerializeField] private TextMeshProUGUI textCoins, textCrystals, textLilys;
 
-    private int hearts = 3;
+    //private int hearts = 3;
 
-    public void AddHeart()
+    //public void AddHeart()
+    //{
+    //    //hearts++;
+    //    UpdateHeart();
+    //}
+    //public void RemoveHeart()
+    //{
+    //    //hearts--;
+    //    UpdateHeart();
+    //}
+
+    private void Start()
     {
-        hearts++;
-        UpdateHeart();
+        UserData data = UserDataController.Instance.userData;
+        UpdateHeart(data.Hearts);
+        textCoins.text = data.Coins.ToString();
+        textCrystals.text = data.Crystals.ToString();
+        textLilys.text = data.Lilys.ToString();
     }
-    public void RemoveHeart()
-    {
-        hearts--;
-        UpdateHeart();
-    }
+
     public void GameOver ()
     {
         panelGameOver.SetActive(true);
@@ -31,6 +41,7 @@ public class GameUI : MonoBehaviour
     {
         SceneManager.LoadScene(1);
         Time.timeScale = 1;
+        UserDataController.Instance.ResetData();
     }
 
     public void SetCountCoinsUI(int countCoins) 
@@ -48,7 +59,7 @@ public class GameUI : MonoBehaviour
         textLilys.text = countLilys.ToString();
     }
 
-    void UpdateHeart()
+    public void UpdateHeart(int hearts)
     {
         for (int i=0; i<3; i++)
         {
