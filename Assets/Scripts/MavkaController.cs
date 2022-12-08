@@ -21,7 +21,7 @@ public class MavkaController : MonoBehaviour
     private int countCrystals = 0;
     private int hearts = 3;
     private int countLilys = 5;
-
+    public Vector3 chackPoint;
 
     public int coins
     {
@@ -43,6 +43,7 @@ public class MavkaController : MonoBehaviour
     void Start()
     {
         gameUI.SetCountLilysUI(countLilys);
+        chackPoint = transform.position;
     }
 
     void FixedUpdate()
